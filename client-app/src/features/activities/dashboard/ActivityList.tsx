@@ -5,9 +5,16 @@ import { Activity } from "../../../app/models/activity";
 type Props = {
   activities: Activity[];
   selectActivity: (id: string) => void;
+  closeForm: () => void;
+  deleteActivity: (id: string) => void;
 };
 
-function ActivityList({ activities, selectActivity }: Props) {
+function ActivityList({
+  activities,
+  selectActivity,
+  closeForm,
+  deleteActivity,
+}: Props) {
   return (
     <Segment>
       <Item.Group divided>
@@ -23,7 +30,24 @@ function ActivityList({ activities, selectActivity }: Props) {
                 </div>
               </Item.Description>
               <Item.Extra>
-                <Button onClick={() => selectActivity(activity.id)} floated="right" content="View" color="blue" />
+                <Button
+                  onClick={() => {
+                    selectActivity(activity.id);
+                    closeForm();
+                  }}
+                  floated="right"
+                  content="View"
+                  color="blue"
+                />
+                <Button
+                  onClick={() => {
+                    deleteActivity(activity.id);
+                    closeForm();
+                  }}
+                  floated="right"
+                  content="Delete"
+                  color="red"
+                />
                 <Label basic content={activity.category} />
               </Item.Extra>
             </Item.Content>
