@@ -1,30 +1,22 @@
-import React, { SyntheticEvent, useState } from "react";
-import { Button, Item, Label, Segment } from "semantic-ui-react";
-import { Activity } from "../../../app/models/activity";
+import { observer } from 'mobx-react-lite';
+import React, { SyntheticEvent, useState } from 'react';
+import { Button, Item, Label, Segment } from 'semantic-ui-react';
+import { useStore } from '../../../app/stores/store';
 
-type Props = {
-  activities: Activity[];
-  selectActivity: (id: string) => void;
-  closeForm: () => void;
-  deleteActivity: (id: string) => void;
-  submitting: boolean;
-};
+function ActivityList() {
+  const { activityStore } = useStore();
+  const { activitiesByDate: activities, deleteActivity, loading } = activityStore;
 
-function ActivityList({
-  activities,
-  selectActivity,
-  closeForm,
-  deleteActivity,
-  submitting,
-}: Props) {
-
-
-  const [target, setTarget] = useState("");
-  let handleActivityDelete = (e: SyntheticEvent<HTMLButtonElement>, id: string) => {
+  const [target, setTarget] = useState('');
+  let handleActivityDelete = (
+    e: SyntheticEvent<HTMLButtonElement>,
+    id: string
+  ) => {
     setTarget(e.currentTarget.name);
     deleteActivity(id);
   };
 
+  // const {selectActivity} = activityStore;
 
   return (
     <Segment>
@@ -43,8 +35,8 @@ function ActivityList({
               <Item.Extra>
                 <Button
                   onClick={() => {
-                    selectActivity(activity.id);
-                    closeForm();
+                    activityStore.selectActivity(activity.id);
+                    activityStore.closeForm();
                   }}
                   floated="right"
                   content="View"
@@ -52,10 +44,10 @@ function ActivityList({
                 />
                 <Button
                   name={activity.id}
-                  loading={submitting && target ===activity.id}
+                  loading={loading && target === activity.id}
                   onClick={(e) => {
                     handleActivityDelete(e, activity.id);
-                    closeForm();
+                    activityStore.closeForm();
                   }}
                   floated="right"
                   content="Delete"
@@ -71,4 +63,4 @@ function ActivityList({
   );
 }
 
-export default ActivityList;
+export default observer(ActivityList);
