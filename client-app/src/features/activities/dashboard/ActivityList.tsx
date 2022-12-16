@@ -1,17 +1,15 @@
 import { observer } from 'mobx-react-lite';
 import React, { SyntheticEvent, useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import { Button, Item, Label, Segment } from 'semantic-ui-react';
 import { useStore } from '../../../app/stores/store';
 
-function ActivityList() {
+const ActivityList = () => {
   const { activityStore } = useStore();
   const { activitiesByDate: activities, deleteActivity, loading } = activityStore;
 
   const [target, setTarget] = useState('');
-  let handleActivityDelete = (
-    e: SyntheticEvent<HTMLButtonElement>,
-    id: string
-  ) => {
+  let handleActivityDelete = (e: SyntheticEvent<HTMLButtonElement>, id: string) => {
     setTarget(e.currentTarget.name);
     deleteActivity(id);
   };
@@ -24,7 +22,7 @@ function ActivityList() {
         {activities.map((activity) => (
           <Item key={activity.id}>
             <Item.Content>
-              <Item.Header as="a">{activity.title}</Item.Header>
+              <Item.Header as='a'>{activity.title}</Item.Header>
               <Item.Meta>{activity.date}</Item.Meta>
               <Item.Description>
                 <div>{activity.description}</div>
@@ -33,25 +31,16 @@ function ActivityList() {
                 </div>
               </Item.Description>
               <Item.Extra>
-                <Button
-                  onClick={() => {
-                    activityStore.selectActivity(activity.id);
-                    activityStore.closeForm();
-                  }}
-                  floated="right"
-                  content="View"
-                  color="blue"
-                />
+                <Button as={NavLink} to={`/activities/${activity.id}`} floated='right' content='View' color='blue' />
                 <Button
                   name={activity.id}
                   loading={loading && target === activity.id}
                   onClick={(e) => {
                     handleActivityDelete(e, activity.id);
-                    activityStore.closeForm();
                   }}
-                  floated="right"
-                  content="Delete"
-                  color="red"
+                  floated='right'
+                  content='Delete'
+                  color='red'
                 />
                 <Label basic content={activity.category} />
               </Item.Extra>
@@ -61,6 +50,6 @@ function ActivityList() {
       </Item.Group>
     </Segment>
   );
-}
+};
 
 export default observer(ActivityList);
