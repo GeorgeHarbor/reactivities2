@@ -27,7 +27,7 @@ const ActivityForm = () => {
     if (id) loadActivity(id).then((activity) => setActivity(activity!));
   }, [id, loadActivity]);
 
-  let handleSubmit = () => {
+  const handleSubmit = () => {
     if (!activity.id) {
       activity.id = uuid();
       createActivity(activity).then(() => {
@@ -40,7 +40,7 @@ const ActivityForm = () => {
     }
   };
 
-  let handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
     setActivity({ ...activity, [name]: value });
     // console.log(activity[name as keyof Activity]);
